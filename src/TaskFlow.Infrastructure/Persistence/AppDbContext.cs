@@ -6,6 +6,7 @@ namespace TaskFlow.Infrastructure.Persistence;
 public class AppDbContext : DbContext
 {
     public DbSet<Workspace> Workspaces => Set<Workspace>();
+    public DbSet<Board> Boards => Set<Board>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
