@@ -7,6 +7,7 @@ public class AppDbContext : DbContext
 {
     public DbSet<Workspace> Workspaces => Set<Workspace>();
     public DbSet<Board> Boards => Set<Board>();
+    public DbSet<BoardColumn> BoardColumns => Set<BoardColumn>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
