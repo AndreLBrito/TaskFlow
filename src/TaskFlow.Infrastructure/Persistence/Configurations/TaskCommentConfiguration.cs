@@ -10,6 +10,11 @@ public class TaskCommentConfiguration : IEntityTypeConfiguration<TaskComment>
     {
         builder.ToTable("TaskComments");
 
+        builder.HasOne<TaskItem>()
+            .WithMany()
+            .HasForeignKey(comment => comment.TaskItemId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasKey(comment => comment.Id);
 
         builder.Property(comment => comment.TaskItemId)

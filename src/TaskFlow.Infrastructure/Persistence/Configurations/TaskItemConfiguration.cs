@@ -10,6 +10,11 @@ public class TaskItemConfiguration : IEntityTypeConfiguration<TaskItem>
     {
         builder.ToTable("TaskItems");
 
+        builder.HasOne<BoardColumn>()
+            .WithMany()
+            .HasForeignKey(taskItem => taskItem.BoardColumnId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasKey(taskItem => taskItem.Id);
 
         builder.Property(taskItem => taskItem.BoardColumnId)

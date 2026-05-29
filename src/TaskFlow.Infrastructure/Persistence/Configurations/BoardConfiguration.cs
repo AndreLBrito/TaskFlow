@@ -12,6 +12,11 @@ public class BoardConfiguration : IEntityTypeConfiguration<Board>
 
         builder.HasKey(board => board.Id);
 
+        builder.HasOne<Workspace>()
+            .WithMany()
+            .HasForeignKey(board => board.WorkspaceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.Property(board => board.WorkspaceId)
             .IsRequired();
 
