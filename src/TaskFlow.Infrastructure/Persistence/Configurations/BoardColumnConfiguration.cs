@@ -31,5 +31,9 @@ public class BoardColumnConfiguration : IEntityTypeConfiguration<BoardColumn>
             .IsRequired();
 
         builder.Property(column => column.UpdatedAt);
+
+        builder.HasIndex(column => column.BoardId);
+
+        builder.HasIndex(column => new { column.BoardId, column.Order });
     }
 }

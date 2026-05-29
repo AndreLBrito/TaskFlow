@@ -31,5 +31,7 @@ public class BoardConfiguration : IEntityTypeConfiguration<Board>
             .IsRequired();
 
         builder.Property(board => board.UpdatedAt);
+
+        builder.HasIndex(board => board.WorkspaceId);
     }
 }

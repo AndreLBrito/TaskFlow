@@ -28,5 +28,7 @@ public class TaskCommentConfiguration : IEntityTypeConfiguration<TaskComment>
             .IsRequired();
 
         builder.Property(comment => comment.UpdatedAt);
+
+        builder.HasIndex(comment => comment.TaskItemId);
     }
 }

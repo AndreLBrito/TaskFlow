@@ -36,5 +36,9 @@ public class TaskItemConfiguration : IEntityTypeConfiguration<TaskItem>
             .IsRequired();
 
         builder.Property(taskItem => taskItem.UpdatedAt);
+
+        builder.HasIndex(taskItem => taskItem.BoardColumnId);
+
+        builder.HasIndex(taskItem => new { taskItem.BoardColumnId, taskItem.Order });
     }
 }
