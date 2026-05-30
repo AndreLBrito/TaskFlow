@@ -1,5 +1,7 @@
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using FluentValidation;
+using MediatR;
+using TaskFlow.Application.Behaviors;
 
 namespace TaskFlow.Application.DependencyInjection;
 
@@ -9,8 +11,16 @@ public static class ApplicationServiceCollectionExtensions
     {
         services.AddMediatR(configuration =>
         {
-            configuration.RegisterServicesFromAssembly(typeof(ApplicationServiceCollectionExtensions).Assembly);
+            configuration.RegisterServicesFromAssembly(
+                typeof(ApplicationServiceCollectionExtensions).Assembly);
         });
+
+        services.AddValidatorsFromAssembly(
+            typeof(ApplicationServiceCollectionExtensions).Assembly);
+
+        services.AddTransient(
+            typeof(IPipelineBehavior<,>),
+            typeof(ValidationBehavior<,>));
 
         return services;
     }

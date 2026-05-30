@@ -20,8 +20,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 
-builder.Services.AddValidatorsFromAssemblyContaining<CreateWorkspaceCommandValidator>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
