@@ -1,0 +1,30 @@
+@model TaskFlow.Application.Features.Workspaces.GetWorkspaceById.WorkspaceDetailsDto
+
+@{
+    ViewData["Title"] = "Detalhes do workspace";
+}
+
+<h1>Detalhes do workspace</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <p class="card-text">@Model.Description</p>
+        }
+        else
+        {
+            <p class="text-muted">Sem descrição.</p>
+        }
+
+        <p class="text-muted">
+            Criado em: @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+        </p>
+
+        <a asp-controller="Workspaces" asp-action="Create" class="btn btn-primary">
+            Criar outro workspace
+        </a>
+    </div>
+</div>
