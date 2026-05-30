@@ -1,0 +1,24 @@
+@model TaskFlow.Application.Features.Workspaces.CreateWorkspace.CreateWorkspaceCommand
+
+@{
+    ViewData["Title"] = "Novo workspace";
+}
+
+<h1>Novo workspace</h1>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Nome</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Descrição</label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
