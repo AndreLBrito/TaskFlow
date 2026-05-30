@@ -1,0 +1,50 @@
+@model IReadOnlyList<TaskFlow.Application.Features.Workspaces.GetWorkspaces.WorkspaceListItemDto>
+
+@{
+    ViewData["Title"] = "Workspaces";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Workspaces</h1>
+
+    <a asp-action="Create" class="btn btn-primary">
+        Novo workspace
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Nenhum workspace cadastrado.
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Data de criação</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var workspace in Model)
+        {
+            <tr>
+                <td>@workspace.Name</td>
+                <td>@workspace.Description</td>
+                <td>@workspace.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@workspace.Id"
+                       class="btn btn-sm btn-outline-primary">
+                        Detalhes
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
