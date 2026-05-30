@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
+using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
 
 namespace TaskFlow.Web.Controllers;
 
@@ -29,8 +30,19 @@ public class WorkspacesController : Controller
         return RedirectToAction(nameof(Details), new { id = workspaceId });
     }
 
-    public IActionResult Details(Guid id)
+    public async Task<IActionResult> Details(
+        Guid id,
+        CancellationToken cancellationToken)
     {
-        return View();
+        var workspace = await _mediator.Send(
+            new GetWorkspaceByIdQuery(id),
+            cancellationToken);
+
+        if (workspace is null)
+        {
+            return NotFound();
+        }
+
+        return View(workspace);
     }
 }
