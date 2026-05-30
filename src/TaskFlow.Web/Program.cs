@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 using TaskFlow.Application.DependencyInjection;
+using TaskFlow.Application.DependencyInjection;
+using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Infrastructure.DependencyInjection;
 using TaskFlow.Infrastructure.Persistence;
 
@@ -16,6 +19,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateWorkspaceCommandValidator>();
 
 var app = builder.Build();
 
