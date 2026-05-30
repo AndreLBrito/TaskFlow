@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TaskFlow.Infrastructure.DependencyInjection;
 using TaskFlow.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
