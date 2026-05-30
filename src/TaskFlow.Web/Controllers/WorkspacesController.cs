@@ -1,7 +1,8 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
+using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
 
 namespace TaskFlow.Web.Controllers;
 
@@ -12,6 +13,16 @@ public class WorkspacesController : Controller
     public WorkspacesController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    public async Task<IActionResult> Index(
+        CancellationToken cancellationToken)
+    {
+        var workspaces = await _mediator.Send(
+            new GetWorkspacesQuery(),
+            cancellationToken);
+
+        return View(workspaces);
     }
 
     public IActionResult Create()
