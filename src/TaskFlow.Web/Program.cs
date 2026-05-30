@@ -1,15 +1,16 @@
 using Microsoft.EntityFrameworkCore;
-using FluentValidation;
 using TaskFlow.Application.DependencyInjection;
-using TaskFlow.Application.DependencyInjection;
-using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Infrastructure.DependencyInjection;
 using TaskFlow.Infrastructure.Persistence;
+using TaskFlow.Web.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<ValidationExceptionFilter>();
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
