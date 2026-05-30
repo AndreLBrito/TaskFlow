@@ -25,4 +25,11 @@ public class WorkspaceRepository : IWorkspaceRepository
         return await _context.Workspaces
             .FirstOrDefaultAsync(workspace => workspace.Id == id, cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Workspace>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Workspaces
+            .OrderBy(workspace => workspace.Name)
+            .ToListAsync(cancellationToken);
+    }
 }
