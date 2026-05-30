@@ -32,4 +32,13 @@ public class WorkspaceRepository : IWorkspaceRepository
             .OrderBy(workspace => workspace.Name)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task UpdateAsync(
+    Workspace workspace,
+    CancellationToken cancellationToken)
+    {
+        _context.Workspaces.Update(workspace);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }
