@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
 using MediatR;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
@@ -36,9 +37,27 @@ public class WorkspacesController : Controller
         CreateWorkspaceCommand command,
         CancellationToken cancellationToken)
     {
-        var workspaceId = await _mediator.Send(command, cancellationToken);
+        try
+        {
+            var workspaceId = await _mediator.Send(
+                command,
+                cancellationToken);
 
-        return RedirectToAction(nameof(Details), new { id = workspaceId });
+            return RedirectToAction(
+                nameof(Details),
+                new { id = workspaceId });
+        }
+        catch (ValidationException exception)
+        {
+            foreach (var error in exception.Errors)
+            {
+                ModelState.AddModelError(
+                    error.PropertyName,
+                    error.ErrorMessage);
+            }
+
+            return View(command);
+        }
     }
 
     public async Task<IActionResult> Details(
