@@ -25,9 +25,20 @@
 
         <a asp-controller="Workspaces" asp-action="Create" class="btn btn-primary">
             Criar outro workspace
-        </a>        
+        </a>
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
             Editar
         </a>
+        <form asp-action="Delete" method="post" class="d-inline">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="id" value="@Model.Id" />
+
+            <button type="submit" class="btn btn-danger"
+                    onclick="return confirm('Deseja realmente excluir este workspace?');">
+                Excluir
+            </button>
+        </form>
     </div>
 </div>

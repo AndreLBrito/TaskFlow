@@ -7,6 +7,8 @@ using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
 using TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
 namespace TaskFlow.Web.Controllers;
 
+using TaskFlow.Application.Features.Workspaces.DeleteWorkspace;
+
 public class WorkspacesController : Controller
 {
     private readonly IMediator _mediator;
@@ -96,5 +98,18 @@ public class WorkspacesController : Controller
         return RedirectToAction(
             nameof(Details),
             new { id = command.Id });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(
+    Guid id,
+    CancellationToken cancellationToken)
+    {
+        await _mediator.Send(
+            new DeleteWorkspaceCommand(id),
+            cancellationToken);
+
+        return RedirectToAction(nameof(Index));
     }
 }
