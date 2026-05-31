@@ -19,7 +19,7 @@ public class CreateWorkspaceCommandHandler : IRequestHandler<CreateWorkspaceComm
         CancellationToken cancellationToken)
     {
         var workspace = new Workspace(
-            request.Name,
+            request.Name!,
             request.Description);
 
         await _workspaceRepository.AddAsync(
