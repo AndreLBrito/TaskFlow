@@ -4,7 +4,7 @@ using MediatR;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
-
+using TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
 namespace TaskFlow.Web.Controllers;
 
 public class WorkspacesController : Controller
@@ -60,5 +60,41 @@ public class WorkspacesController : Controller
         }
 
         return View(workspace);
+    }
+
+    public async Task<IActionResult> Edit(
+    Guid id,
+    CancellationToken cancellationToken)
+    {
+        var workspace = await _mediator.Send(
+            new GetWorkspaceByIdQuery(id),
+            cancellationToken);
+
+        if (workspace is null)
+        {
+            return NotFound();
+        }
+
+        var command = new UpdateWorkspaceCommand(
+            workspace.Id,
+            workspace.Name,
+            workspace.Description);
+
+        return View(command);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(
+    UpdateWorkspaceCommand command,
+    CancellationToken cancellationToken)
+    {
+        await _mediator.Send(
+            command,
+            cancellationToken);
+
+        return RedirectToAction(
+            nameof(Details),
+            new { id = command.Id });
     }
 }
