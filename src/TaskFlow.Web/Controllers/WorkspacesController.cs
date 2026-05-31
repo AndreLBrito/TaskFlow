@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
 using MediatR;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
 using TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
 namespace TaskFlow.Web.Controllers;
+
+using TaskFlow.Web.ViewModels.Workspaces;
 
 using TaskFlow.Application.Features.Workspaces.DeleteWorkspace;
 
@@ -30,15 +31,19 @@ public class WorkspacesController : Controller
 
     public IActionResult Create()
     {
-        return View();
+        return View(new CreateWorkspaceViewModel());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        CreateWorkspaceCommand command,
+        CreateWorkspaceViewModel model,
         CancellationToken cancellationToken)
     {
+        var command = new CreateWorkspaceCommand(
+            model.Name,
+            model.Description);
+
         var workspaceId = await _mediator.Send(
             command,
             cancellationToken);
