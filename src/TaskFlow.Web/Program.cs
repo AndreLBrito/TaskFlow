@@ -3,6 +3,7 @@ using TaskFlow.Application.DependencyInjection;
 using TaskFlow.Infrastructure.DependencyInjection;
 using TaskFlow.Infrastructure.Persistence;
 using TaskFlow.Web.Filters;
+using TaskFlow.Web.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
+MapsterConfiguration.RegisterMappings();
 
 var app = builder.Build();
 
