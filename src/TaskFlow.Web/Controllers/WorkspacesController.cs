@@ -82,27 +82,34 @@ public class WorkspacesController : Controller
             return NotFound();
         }
 
-        var command = new UpdateWorkspaceCommand(
-            workspace.Id,
-            workspace.Name,
-            workspace.Description);
+        var model = new UpdateWorkspaceViewModel
+        {
+            Id = workspace.Id,
+            Name = workspace.Name,
+            Description = workspace.Description
+        };
 
-        return View(command);
+        return View(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
-    UpdateWorkspaceCommand command,
-    CancellationToken cancellationToken)
+        UpdateWorkspaceViewModel model,
+        CancellationToken cancellationToken)
     {
+        var command = new UpdateWorkspaceCommand(
+            model.Id,
+            model.Name,
+            model.Description);
+
         await _mediator.Send(
             command,
             cancellationToken);
 
         return RedirectToAction(
             nameof(Details),
-            new { id = command.Id });
+            new { id = model.Id });
     }
 
     [HttpPost]
