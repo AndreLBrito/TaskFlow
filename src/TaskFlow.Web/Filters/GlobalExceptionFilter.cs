@@ -10,6 +10,16 @@ public class GlobalExceptionFilter : IAsyncExceptionFilter
     {
         switch (context.Exception)
         {
+            case BusinessRuleException businessRuleException:
+                context.Result = new BadRequestObjectResult(
+                    new
+                    {
+                        Error = businessRuleException.Message
+                    });
+
+                context.ExceptionHandled = true;
+                break;
+
             case NotFoundException:
                 context.Result = new NotFoundResult();
                 context.ExceptionHandled = true;
