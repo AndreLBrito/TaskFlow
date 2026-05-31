@@ -41,4 +41,13 @@ public class WorkspaceRepository : IWorkspaceRepository
 
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task DeleteAsync(
+    Workspace workspace,
+    CancellationToken cancellationToken)
+    {
+        _context.Workspaces.Remove(workspace);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }
