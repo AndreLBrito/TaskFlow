@@ -1,4 +1,5 @@
 using MediatR;
+using TaskFlow.Application.Common.Exceptions;
 using TaskFlow.Application.Interfaces;
 
 namespace TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
@@ -24,7 +25,7 @@ public class UpdateWorkspaceCommandHandler
 
         if (workspace is null)
         {
-            throw new KeyNotFoundException("Workspace não encontrado.");
+            throw new NotFoundException("Workspace não encontrado.");
         }
 
         workspace.Rename(request.Name!);
