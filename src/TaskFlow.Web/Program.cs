@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add<ValidationExceptionFilter>();
+    options.Filters.Add<GlobalExceptionFilter>();
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
