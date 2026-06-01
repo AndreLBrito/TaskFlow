@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using Mapster;
 using MediatR;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Application.Features.Workspaces.DeleteWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
 using TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
-using TaskFlow.Web.ViewModels.Workspaces;
+using TaskFlow.Web.ViewModels.Workspaces.Create;
+using TaskFlow.Web.ViewModels.Workspaces.Update;
 using TaskFlow.Web.Mapping;
 
 namespace TaskFlow.Web.Controllers;
@@ -81,7 +81,7 @@ public class WorkspacesController : Controller
             return NotFound();
         }
 
-        var model = workspace.Adapt<UpdateWorkspaceViewModel>();
+        var model = workspace.To<UpdateWorkspaceViewModel>();
 
         return View(model);
     }

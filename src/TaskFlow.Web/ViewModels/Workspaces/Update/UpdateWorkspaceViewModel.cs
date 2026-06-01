@@ -1,4 +1,4 @@
-namespace TaskFlow.Web.ViewModels.Workspaces;
+namespace TaskFlow.Web.ViewModels.Workspaces.Update;
 
 public class UpdateWorkspaceViewModel
 {
