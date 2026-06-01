@@ -1,4 +1,3 @@
-using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Features.Boards.CreateBoard;
@@ -31,12 +30,13 @@ public class BoardsController : Controller
             new GetBoardsQuery(workspaceId),
             cancellationToken);
 
-        ViewBag.WorkspaceId = workspaceId;
-
-        return View(
-            boards
+        return View(new BoardListViewModel
+        {
+            WorkspaceId = workspaceId,
+            Boards = boards
                 .Select(board => board.To<BoardListItemViewModel>())
-                .ToList());
+                .ToList()
+        });
     }
 
     public IActionResult Create(Guid workspaceId)
