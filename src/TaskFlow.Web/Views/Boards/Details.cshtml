@@ -12,6 +12,25 @@
     @Model.Description
 </p>
 
+<h3 class="mt-4">Colunas</h3>
+
+<div class="row">
+    @foreach (var column in Model.Columns)
+    {
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    @column.Name
+                </div>
+
+                <div class="card-body">
+                    Nenhuma tarefa.
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
 <p>
     <strong>Criado em:</strong>
     @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")

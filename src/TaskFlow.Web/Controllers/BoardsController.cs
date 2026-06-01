@@ -1,5 +1,6 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using TaskFlow.Application.Features.BoardColumns.GetBoardColumns;
 using TaskFlow.Application.Features.Boards.CreateBoard;
 using TaskFlow.Application.Features.Boards.DeleteBoard;
 using TaskFlow.Application.Features.Boards.GetBoardById;
@@ -74,8 +75,22 @@ public class BoardsController : Controller
         {
             return NotFound();
         }
+        var columns = await _mediator.Send(
+            new GetBoardColumnsQuery(board.Id),
+            cancellationToken);
 
-        return View(board.To<BoardDetailsViewModel>());
+        var model = board.To<BoardDetailsViewModel>();
+
+        model.Columns = columns
+            .Select(column => new BoardColumnViewModel
+            {
+                Id = column.Id,
+                Name = column.Name,
+                Order = column.Order
+            })
+            .ToList();
+
+        return View(model);
     }
 
     public async Task<IActionResult> Edit(
