@@ -30,21 +30,23 @@ else
             </tr>
         </thead>
         <tbody>
-        @foreach (var workspace in Model)
-        {
-            <tr>
-                <td>@workspace.Name</td>
-                <td>@workspace.Description</td>
-                <td>@workspace.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
-                <td>
-                    <a asp-action="Details"
-                       asp-route-id="@workspace.Id"
-                       class="btn btn-sm btn-outline-primary">
-                        Detalhes
-                    </a>
-                </td>
-            </tr>
-        }
+            @foreach (var workspace in Model)
+            {
+                <tr>
+                    <td>@workspace.Name</td>
+                    <td>@workspace.Description</td>
+                    <td>@workspace.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@workspace.Id" class="btn btn-sm btn-outline-primary">
+                            Detalhes
+                        </a>
+                        <a asp-controller="Boards" asp-action="Index" asp-route-workspaceId="@workspace.Id"
+                           class="btn btn-sm btn-outline-secondary">
+                            Quadros
+                        </a>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 }

@@ -22,7 +22,9 @@
         <p class="text-muted">
             Criado em: @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
         </p>
-
+        <a asp-controller="Boards" asp-action="Index" asp-route-workspaceId="@Model.Id" class="btn btn-primary">
+            Ver quadros
+        </a>
         <a asp-controller="Workspaces" asp-action="Create" class="btn btn-primary">
             Criar outro workspace
         </a>

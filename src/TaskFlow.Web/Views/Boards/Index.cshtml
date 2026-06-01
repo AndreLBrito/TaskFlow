@@ -1,0 +1,55 @@
+@model IReadOnlyList<TaskFlow.Web.ViewModels.Boards.List.BoardListItemViewModel>
+
+@{
+    ViewData["Title"] = "Quadros";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Quadros</h1>
+
+    @if (Model.Any())
+    {
+        <a asp-action="Create"
+           asp-route-workspaceId="@Model.First().WorkspaceId"
+           class="btn btn-primary">
+            Novo quadro
+        </a>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Nenhum quadro cadastrado.
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Data de criação</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var board in Model)
+        {
+            <tr>
+                <td>@board.Name</td>
+                <td>@board.Description</td>
+                <td>@board.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@board.Id"
+                       class="btn btn-sm btn-outline-primary">
+                        Detalhes
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,39 @@
+@model TaskFlow.Web.ViewModels.Boards.Details.BoardDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1>@Model.Name</h1>
+
+<p>
+    @Model.Description
+</p>
+
+<p>
+    <strong>Criado em:</strong>
+    @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+</p>
+
+<a asp-action="Edit"
+   asp-route-id="@Model.Id"
+   class="btn btn-warning">
+    Editar
+</a>
+
+<form asp-action="Delete"
+      method="post"
+      class="d-inline">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           name="id"
+           value="@Model.Id" />
+
+    <button type="submit"
+            class="btn btn-danger"
+            onclick="return confirm('Deseja realmente excluir este quadro?');">
+        Excluir
+    </button>
+</form>
