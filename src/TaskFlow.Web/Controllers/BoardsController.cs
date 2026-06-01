@@ -31,6 +31,8 @@ public class BoardsController : Controller
             new GetBoardsQuery(workspaceId),
             cancellationToken);
 
+        ViewBag.WorkspaceId = workspaceId;
+
         return View(
             boards
                 .Select(board => board.To<BoardListItemViewModel>())
@@ -111,6 +113,7 @@ public class BoardsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(
         Guid id,
+        Guid workspaceId,
         CancellationToken cancellationToken)
     {
         await _mediator.Send(
@@ -118,6 +121,7 @@ public class BoardsController : Controller
             cancellationToken);
 
         return RedirectToAction(
-            nameof(Index));
+            nameof(Index),
+            new { workspaceId });
     }
 }
