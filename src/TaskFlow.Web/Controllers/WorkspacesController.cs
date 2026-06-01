@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using Mapster;
 using MediatR;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
+using TaskFlow.Application.Features.Workspaces.DeleteWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
 using TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
-namespace TaskFlow.Web.Controllers;
-
 using TaskFlow.Web.ViewModels.Workspaces;
 
-using TaskFlow.Application.Features.Workspaces.DeleteWorkspace;
+namespace TaskFlow.Web.Controllers;
 
 public class WorkspacesController : Controller
 {
@@ -40,9 +40,7 @@ public class WorkspacesController : Controller
         CreateWorkspaceViewModel model,
         CancellationToken cancellationToken)
     {
-        var command = new CreateWorkspaceCommand(
-            model.Name,
-            model.Description);
+        var command = model.Adapt<CreateWorkspaceCommand>();
 
         var workspaceId = await _mediator.Send(
             command,
@@ -82,12 +80,7 @@ public class WorkspacesController : Controller
             return NotFound();
         }
 
-        var model = new UpdateWorkspaceViewModel
-        {
-            Id = workspace.Id,
-            Name = workspace.Name,
-            Description = workspace.Description
-        };
+        var model = workspace.Adapt<UpdateWorkspaceViewModel>();
 
         return View(model);
     }
@@ -98,10 +91,7 @@ public class WorkspacesController : Controller
         UpdateWorkspaceViewModel model,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateWorkspaceCommand(
-            model.Id,
-            model.Name,
-            model.Description);
+        var command = model.Adapt<UpdateWorkspaceCommand>();
 
         await _mediator.Send(
             command,

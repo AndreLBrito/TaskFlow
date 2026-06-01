@@ -1,5 +1,6 @@
 using Mapster;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
+using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
 using TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
 using TaskFlow.Web.ViewModels.Workspaces;
 
@@ -13,6 +14,9 @@ public static class MapsterConfiguration
             .NewConfig();
 
         TypeAdapterConfig<UpdateWorkspaceViewModel, UpdateWorkspaceCommand>
+            .NewConfig();
+            
+        TypeAdapterConfig<WorkspaceDetailsDto, UpdateWorkspaceViewModel>
             .NewConfig();
     }
 }
