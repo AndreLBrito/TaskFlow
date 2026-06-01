@@ -9,6 +9,7 @@ public static class InfrastructureServiceCollectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
+        services.AddScoped<IBoardRepository, BoardRepository>();
 
         return services;
     }
