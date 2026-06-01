@@ -26,8 +26,10 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-    <button type="submit"
-            class="btn btn-primary">
+    <button type="submit" class="btn btn-primary">
         Salvar
     </button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+    Cancelar
+</a>
 </form>

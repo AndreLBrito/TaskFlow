@@ -1,5 +1,7 @@
 @model TaskFlow.Web.ViewModels.Boards.List.BoardListViewModel
-
+<a asp-controller="Workspaces" asp-action="Details" asp-route-id="@Model.WorkspaceId" class="btn btn-secondary mb-3">
+    Voltar para workspace
+</a>
 @{
     ViewData["Title"] = "Quadros";
 }

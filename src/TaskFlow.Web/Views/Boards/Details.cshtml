@@ -1,5 +1,7 @@
 @model TaskFlow.Web.ViewModels.Boards.Details.BoardDetailsViewModel
-
+<a asp-controller="Workspaces" asp-action="Details" asp-route-id="@Model.WorkspaceId" class="btn btn-secondary mb-3">
+    Voltar para workspace
+</a>
 @{
     ViewData["Title"] = Model.Name;
 }
@@ -15,29 +17,19 @@
     @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
 </p>
 
-<a asp-action="Edit"
-   asp-route-id="@Model.Id"
-   class="btn btn-warning">
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
     Editar
 </a>
 
-<form asp-action="Delete"
-      method="post"
-      class="d-inline">
+<form asp-action="Delete" method="post" class="d-inline">
 
     @Html.AntiForgeryToken()
 
-    <input type="hidden"
-           name="id"
-           value="@Model.Id" />
+    <input type="hidden" name="id" value="@Model.Id" />
 
-    <input type="hidden"
-           name="workspaceId"
-           value="@Model.WorkspaceId" />
+    <input type="hidden" name="workspaceId" value="@Model.WorkspaceId" />
 
-    <button type="submit"
-            class="btn btn-danger"
-            onclick="return confirm('Deseja realmente excluir este quadro?');">
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir este quadro?');">
         Excluir
     </button>
 </form>
