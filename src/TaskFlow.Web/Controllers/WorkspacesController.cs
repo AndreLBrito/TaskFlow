@@ -7,6 +7,7 @@ using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
 using TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
 using TaskFlow.Web.ViewModels.Workspaces;
+using TaskFlow.Web.Mapping;
 
 namespace TaskFlow.Web.Controllers;
 
@@ -40,7 +41,7 @@ public class WorkspacesController : Controller
         CreateWorkspaceViewModel model,
         CancellationToken cancellationToken)
     {
-        var command = model.Adapt<CreateWorkspaceCommand>();
+        var command = model.To<CreateWorkspaceCommand>();
 
         var workspaceId = await _mediator.Send(
             command,
@@ -91,10 +92,8 @@ public class WorkspacesController : Controller
         UpdateWorkspaceViewModel model,
         CancellationToken cancellationToken)
     {
-        var command = model.Adapt<UpdateWorkspaceCommand>();
-
         await _mediator.Send(
-            command,
+            model.To<UpdateWorkspaceCommand>(),
             cancellationToken);
 
         return RedirectToAction(
