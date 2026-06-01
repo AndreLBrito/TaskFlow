@@ -39,4 +39,13 @@ public class BoardRepository : IBoardRepository
             .OrderBy(board => board.Name)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task UpdateAsync(
+    Board board,
+    CancellationToken cancellationToken)
+    {
+        _context.Boards.Update(board);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

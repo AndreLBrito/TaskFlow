@@ -15,4 +15,8 @@ public interface IBoardRepository
     Task<IReadOnlyList<Board>> GetByWorkspaceIdAsync(
         Guid workspaceId,
         CancellationToken cancellationToken);
+
+    Task UpdateAsync(
+        Board board,
+        CancellationToken cancellationToken);
 }
