@@ -10,13 +10,16 @@ public class CreateBoardCommandHandler
 {
     private readonly IWorkspaceRepository _workspaceRepository;
     private readonly IBoardRepository _boardRepository;
+    private readonly IBoardColumnRepository _boardColumnRepository;
 
     public CreateBoardCommandHandler(
         IWorkspaceRepository workspaceRepository,
-        IBoardRepository boardRepository)
+        IBoardRepository boardRepository,
+        IBoardColumnRepository boardColumnRepository)
     {
         _workspaceRepository = workspaceRepository;
         _boardRepository = boardRepository;
+        _boardColumnRepository = boardColumnRepository;
     }
 
     public async Task<Guid> Handle(
@@ -39,6 +42,28 @@ public class CreateBoardCommandHandler
 
         await _boardRepository.AddAsync(
             board,
+            cancellationToken);
+
+        var defaultColumns = new List<BoardColumn>
+        {
+            new(
+                board.Id,
+                "A Fazer",
+                1),
+
+            new(
+                board.Id,
+                "Em Andamento",
+                2),
+
+            new(
+                board.Id,
+                "Concluído",
+                3)
+        };
+
+        await _boardColumnRepository.AddRangeAsync(
+            defaultColumns,
             cancellationToken);
 
         return board.Id;
