@@ -19,4 +19,8 @@ public interface IBoardRepository
     Task UpdateAsync(
         Board board,
         CancellationToken cancellationToken);
+
+    Task DeleteAsync(
+        Board board,
+        CancellationToken cancellationToken);
 }
