@@ -23,4 +23,7 @@ public interface IBoardRepository
     Task DeleteAsync(
         Board board,
         CancellationToken cancellationToken);
+
+    Task<int> CountAsync(
+        CancellationToken cancellationToken);
 }

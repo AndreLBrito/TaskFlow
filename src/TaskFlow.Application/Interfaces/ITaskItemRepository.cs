@@ -31,4 +31,10 @@ public interface ITaskItemRepository
     Task<int> GetNextOrderAsync(
         Guid boardColumnId,
         CancellationToken cancellationToken);
+
+    Task<int> CountAsync(
+        CancellationToken cancellationToken);
+
+    Task<int> CountCompletedAsync(
+        CancellationToken cancellationToken);
 }

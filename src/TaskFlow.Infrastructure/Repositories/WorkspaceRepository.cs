@@ -50,4 +50,11 @@ public class WorkspaceRepository : IWorkspaceRepository
 
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<int> CountAsync(
+        CancellationToken cancellationToken)
+    {
+        return await _context.Workspaces
+            .CountAsync(cancellationToken);
+    }
 }

@@ -86,4 +86,21 @@ public class TaskItemRepository : ITaskItemRepository
 
         return (maxOrder ?? -1) + 1;
     }
+
+    public async Task<int> CountAsync(
+        CancellationToken cancellationToken)
+    {
+        return await _context.TaskItems
+            .CountAsync(cancellationToken);
+    }
+
+    public async Task<int> CountCompletedAsync(
+        CancellationToken cancellationToken)
+    {
+        return await _context.TaskItems
+            .Include(task => task.BoardColumn)
+            .CountAsync(
+                task => task.BoardColumn!.Name == "Concluído",
+                cancellationToken);
+    }
 }

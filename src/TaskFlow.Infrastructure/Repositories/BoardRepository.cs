@@ -57,4 +57,11 @@ public class BoardRepository : IBoardRepository
 
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<int> CountAsync(
+        CancellationToken cancellationToken)
+    {
+        return await _context.Boards
+            .CountAsync(cancellationToken);
+    }
 }
