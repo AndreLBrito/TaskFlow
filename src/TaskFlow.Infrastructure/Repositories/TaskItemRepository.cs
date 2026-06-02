@@ -69,7 +69,7 @@ public class TaskItemRepository : ITaskItemRepository
     {
         return await _context.TaskItems
             .Include(task => task.BoardColumn)
-            .ThenInclude(column => column.Board)
+            .ThenInclude(column => column!.Board)
             .FirstOrDefaultAsync(
                 task => task.Id == id,
                 cancellationToken);

@@ -18,13 +18,19 @@ public class GetTaskItemByIdQueryHandler
         GetTaskItemByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var task = await _taskItemRepository.GetByIdAsync(
+        var task = await _taskItemRepository.GetByIdWithBoardAsync(
             request.Id,
             cancellationToken);
 
         if (task is null)
         {
             return null;
+        }
+
+        if (task.BoardColumn?.Board is null)
+        {
+            throw new InvalidOperationException(
+                "Não foi possível identificar o quadro da tarefa.");
         }
 
         return new TaskItemDetailsDto
