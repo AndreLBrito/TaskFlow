@@ -45,4 +45,14 @@ public class BoardColumnRepository : IBoardColumnRepository
             .OrderBy(column => column.Order)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<BoardColumn?> GetByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        return await _context.BoardColumns
+            .FirstOrDefaultAsync(
+                column => column.Id == id,
+                cancellationToken);
+    }
 }
