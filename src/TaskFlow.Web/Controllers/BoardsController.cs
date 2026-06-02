@@ -11,6 +11,7 @@ using TaskFlow.Web.ViewModels.Boards.Create;
 using TaskFlow.Web.ViewModels.Boards.Details;
 using TaskFlow.Web.ViewModels.Boards.List;
 using TaskFlow.Web.ViewModels.Boards.Update;
+using TaskFlow.Application.Features.TaskItems.GetTasksByColumn;
 
 namespace TaskFlow.Web.Controllers;
 
@@ -81,14 +82,32 @@ public class BoardsController : Controller
 
         var model = board.To<BoardDetailsViewModel>();
 
-        model.Columns = columns
-            .Select(column => new BoardColumnViewModel
+        var columnViewModels = new List<BoardColumnViewModel>();
+
+        foreach (var column in columns)
+        {
+            var tasks = await _mediator.Send(
+                new GetTasksByColumnQuery(column.Id),
+                cancellationToken);
+
+            columnViewModels.Add(new BoardColumnViewModel
             {
                 Id = column.Id,
                 Name = column.Name,
-                Order = column.Order
-            })
-            .ToList();
+                Order = column.Order,
+                Tasks = tasks
+                    .Select(task => new TaskItemViewModel
+                    {
+                        Id = task.Id,
+                        Title = task.Title,
+                        Description = task.Description,
+                        DueDate = task.DueDate
+                    })
+                    .ToList()
+            });
+        }
+
+        model.Columns = columnViewModels;
 
         return View(model);
     }

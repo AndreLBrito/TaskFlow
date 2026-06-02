@@ -24,7 +24,36 @@
                 </div>
 
                 <div class="card-body">
-                    Nenhuma tarefa.
+
+                    @if (!column.Tasks.Any())
+                    {
+                        <p class="text-muted">
+                            Nenhuma tarefa.
+                        </p>
+                    }
+                    else
+                    {
+                        @foreach (var task in column.Tasks)
+                        {
+                            <div class="card mb-2">
+                                <div class="card-body">
+
+                                    <strong>
+                                        @task.Title
+                                    </strong>
+
+                                    @if (!string.IsNullOrWhiteSpace(task.Description))
+                                    {
+                                        <p class="mb-0">
+                                            @task.Description
+                                        </p>
+                                    }
+
+                                </div>
+                            </div>
+                        }
+                    }
+
                 </div>
             </div>
         </div>

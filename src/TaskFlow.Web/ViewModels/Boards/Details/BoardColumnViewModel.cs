@@ -7,4 +7,6 @@ public class BoardColumnViewModel
     public string Name { get; set; } = string.Empty;
 
     public int Order { get; set; }
+
+    public IReadOnlyList<TaskItemViewModel> Tasks { get; set; } = [];
 }
