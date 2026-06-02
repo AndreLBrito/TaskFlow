@@ -12,7 +12,7 @@ public class GlobalExceptionFilter : IAsyncExceptionFilter
         Log.Error(
             context.Exception,
             "Erro não tratado");
-            
+
         switch (context.Exception)
         {
             case BusinessRuleException businessRuleException:
@@ -25,8 +25,9 @@ public class GlobalExceptionFilter : IAsyncExceptionFilter
                 context.ExceptionHandled = true;
                 break;
 
-            case NotFoundException:
-                context.Result = new NotFoundResult();
+            case NotFoundException exception:
+                context.Result = new NotFoundObjectResult(
+                    new { Error = exception.Message });
                 context.ExceptionHandled = true;
                 break;
 
