@@ -11,7 +11,7 @@ public class TaskItemConfiguration : IEntityTypeConfiguration<TaskItem>
         builder.ToTable("TaskItems");
 
         builder.HasOne<BoardColumn>()
-            .WithMany()
+             .WithMany(column => column.Tasks)
             .HasForeignKey(taskItem => taskItem.BoardColumnId)
             .OnDelete(DeleteBehavior.Cascade);
 

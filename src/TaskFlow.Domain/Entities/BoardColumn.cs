@@ -10,6 +10,9 @@ public class BoardColumn : BaseEntity
 
     public int Order { get; private set; }
 
+    public ICollection<TaskItem> Tasks { get; private set; }
+        = new List<TaskItem>();
+
     private BoardColumn()
     {
     }
