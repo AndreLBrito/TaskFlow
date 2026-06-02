@@ -6,6 +6,8 @@ public class BoardColumn : BaseEntity
 {
     public Guid BoardId { get; private set; }
 
+    public Board? Board { get; private set; }
+
     public string Name { get; private set; } = string.Empty;
 
     public int Order { get; private set; }

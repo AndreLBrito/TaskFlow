@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Features.TaskItems.CreateTaskItem;
+using TaskFlow.Application.Features.TaskItems.DeleteTaskItem;
 using TaskFlow.Application.Features.TaskItems.GetTaskItemById;
 using TaskFlow.Application.Features.TaskItems.UpdateTaskItem;
 using TaskFlow.Web.Mapping;
@@ -93,5 +94,22 @@ public class TaskItemsController : Controller
         return RedirectToAction(
             nameof(Details),
             new { id = model.Id });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        Guid boardId,
+        CancellationToken cancellationToken)
+    {
+        await _mediator.Send(
+            new DeleteTaskItemCommand(id),
+            cancellationToken);
+
+        return RedirectToAction(
+            "Details",
+            "Boards",
+            new { id = boardId });
     }
 }

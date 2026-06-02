@@ -23,4 +23,8 @@ public interface ITaskItemRepository
     Task<IReadOnlyList<TaskItem>> GetByColumnIdAsync(
         Guid boardColumnId,
         CancellationToken cancellationToken);
+
+    Task<TaskItem?> GetByIdWithBoardAsync(
+        Guid id,
+        CancellationToken cancellationToken);
 }

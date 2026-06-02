@@ -62,4 +62,16 @@ public class TaskItemRepository : ITaskItemRepository
             .OrderBy(task => task.Order)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<TaskItem?> GetByIdWithBoardAsync(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        return await _context.TaskItems
+            .Include(task => task.BoardColumn)
+            .ThenInclude(column => column.Board)
+            .FirstOrDefaultAsync(
+                task => task.Id == id,
+                cancellationToken);
+    }
 }

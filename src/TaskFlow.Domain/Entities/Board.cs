@@ -10,6 +10,9 @@ public class Board : BaseEntity
 
     public string? Description { get; private set; }
 
+    public ICollection<BoardColumn> Columns { get; private set; }
+        = new List<BoardColumn>();
+
     private Board()
     {
     }

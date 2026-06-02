@@ -6,6 +6,8 @@ public class TaskItem : BaseEntity
 {
     public Guid BoardColumnId { get; private set; }
 
+    public BoardColumn? BoardColumn { get; private set; }
+
     public string Title { get; private set; } = string.Empty;
 
     public string? Description { get; private set; }
