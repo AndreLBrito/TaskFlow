@@ -1,14 +1,31 @@
 using System.Diagnostics;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TaskFlow.Application.Features.Dashboard.GetDashboard;
+using TaskFlow.Web.Mapping;
 using TaskFlow.Web.Models;
+using TaskFlow.Web.ViewModels.Dashboard;
 
 namespace TaskFlow.Web.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index()
+    private readonly IMediator _mediator;
+
+    public HomeController(IMediator mediator)
     {
-        return RedirectToAction("Index", "Workspaces");
+        _mediator = mediator;
+    }
+
+    public async Task<IActionResult> Index(
+        CancellationToken cancellationToken)
+    {
+        var dashboard = await _mediator.Send(
+            new GetDashboardQuery(),
+            cancellationToken);
+
+        return View(
+            dashboard.To<DashboardViewModel>());
     }
 
     public IActionResult Privacy()
