@@ -1,5 +1,7 @@
 # TaskFlow
 
+![Build](https://github.com/AndreLBrito/TaskFlow/actions/workflows/dotnet.yml/badge.svg)
+
 TaskFlow é uma aplicação web de gerenciamento de tarefas inspirada em ferramentas Kanban como Trello e Jira. O projeto foi desenvolvido com foco em boas práticas de arquitetura, separação de responsabilidades, testes automatizados e tecnologias modernas do ecossistema .NET.
 
 ## Tecnologias Utilizadas
