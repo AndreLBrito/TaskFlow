@@ -1,3 +1,7 @@
+<form id="anti-forgery-form">
+    @Html.AntiForgeryToken()
+</form>
+
 @model TaskFlow.Web.ViewModels.Boards.Details.BoardDetailsViewModel
 <a asp-controller="Workspaces" asp-action="Details" asp-route-id="@Model.WorkspaceId" class="btn btn-secondary mb-3">
     Voltar para workspace
@@ -30,17 +34,19 @@
                         Nova tarefa
                     </a>
 
-                    @if (!column.Tasks.Any())
-                    {
-                        <p class="text-muted">
-                            Nenhuma tarefa.
-                        </p>
-                    }
-                    else
-                    {
+                    <div class="kanban-column" data-column-id="@column.Id">
+
+                        @if (!column.Tasks.Any())
+                        {
+                            <p class="text-muted empty-column-message">
+                                Nenhuma tarefa.
+                            </p>
+                        }
+
                         @foreach (var task in column.Tasks)
                         {
-                            <div class="card mb-2">
+                            <div class="card mb-2 kanban-task" data-task-id="@task.Id">
+
                                 <div class="card-body">
 
                                     <a asp-controller="TaskItems" asp-action="Details" asp-route-id="@task.Id">
@@ -57,8 +63,7 @@
                                 </div>
                             </div>
                         }
-                    }
-
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,3 +91,54 @@
         Excluir
     </button>
 </form>
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.7/Sortable.min.js"></script>
+
+    <script>
+        document.querySelectorAll('.kanban-column').forEach(column => {
+        new Sortable(column, {
+        group: 'kanban',
+        animation: 150,
+        draggable: '.kanban-task',
+
+        onEnd: async function (event) {
+        const taskId = event.item.dataset.taskId;
+        const targetColumnId = event.to.dataset.columnId;
+        const newOrder = event.newIndex;
+
+        const token = document.querySelector(
+        'input[name="__RequestVerificationToken"]'
+        ).value;
+
+        const formData = new FormData();
+        formData.append('id', taskId);
+        formData.append('boardColumnId', targetColumnId);
+        formData.append('order', newOrder);
+        formData.append('__RequestVerificationToken', token);
+
+        const response = await fetch('/TaskItems/MoveAjax', {
+        method: 'POST',
+        body: formData
+        });
+
+        if (!response.ok) {
+        alert('Não foi possível mover a tarefa.');
+        window.location.reload();
+        return;
+        }
+
+        document.querySelectorAll('.kanban-column').forEach(column => {
+        const emptyMessage = column.querySelector('.empty-column-message');
+        const hasTasks = column.querySelectorAll('.kanban-task').length > 0;
+
+        if (emptyMessage) {
+        emptyMessage.style.display = hasTasks ? 'none' : 'block';
+        }
+        });
+        }
+        });
+        });
+    </script>
+}

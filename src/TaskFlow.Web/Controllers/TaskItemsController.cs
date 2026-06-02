@@ -167,4 +167,22 @@ public class TaskItemsController : Controller
             "Boards",
             new { id = model.BoardId });
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> MoveAjax(
+        Guid id,
+        Guid boardColumnId,
+        int order,
+        CancellationToken cancellationToken)
+    {
+        await _mediator.Send(
+            new MoveTaskItemCommand(
+                id,
+                boardColumnId,
+                order),
+            cancellationToken);
+
+        return Ok();
+    }
 }
