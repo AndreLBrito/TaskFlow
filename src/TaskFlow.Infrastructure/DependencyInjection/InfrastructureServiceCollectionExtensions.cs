@@ -11,6 +11,7 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
         services.AddScoped<IBoardRepository, BoardRepository>();
         services.AddScoped<IBoardColumnRepository, BoardColumnRepository>();
+        services.AddScoped<ITaskItemRepository, TaskItemRepository>();
 
         return services;
     }
