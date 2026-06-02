@@ -30,6 +30,7 @@ public class GetTaskItemByIdQueryHandler
         return new TaskItemDetailsDto
         {
             Id = task.Id,
+            BoardId = task.BoardColumn!.Board!.Id,
             BoardColumnId = task.BoardColumnId,
             Title = task.Title,
             Description = task.Description,
