@@ -1,0 +1,80 @@
+@model TaskFlow.Web.ViewModels.TaskItems.Update.UpdateTaskItemViewModel
+
+@{
+    ViewData["Title"] = "Editar tarefa";
+}
+
+<h1>Editar tarefa</h1>
+
+<form asp-action="Edit" method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input asp-for="Id" type="hidden" />
+
+    <div asp-validation-summary="All"
+         class="text-danger">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Title"
+               class="form-label">
+            Título
+        </label>
+
+        <input asp-for="Title"
+               class="form-control" />
+
+        <span asp-validation-for="Title"
+              class="text-danger">
+        </span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description"
+               class="form-label">
+            Descrição
+        </label>
+
+        <textarea asp-for="Description"
+                  class="form-control"
+                  rows="4">
+        </textarea>
+
+        <span asp-validation-for="Description"
+              class="text-danger">
+        </span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DueDate"
+               class="form-label">
+            Prazo
+        </label>
+
+        <input asp-for="DueDate"
+               type="date"
+               class="form-control" />
+
+        <span asp-validation-for="DueDate"
+              class="text-danger">
+        </span>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Salvar
+    </button>
+
+    <a asp-action="Details"
+       asp-route-id="@Model.Id"
+       class="btn btn-secondary">
+        Cancelar
+    </a>
+
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
