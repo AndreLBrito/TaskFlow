@@ -25,6 +25,11 @@
 
                 <div class="card-body">
 
+                    <a asp-controller="TaskItems" asp-action="Create" asp-route-boardId="@Model.Id"
+                       asp-route-boardColumnId="@column.Id" class="btn btn-sm btn-primary mb-2">
+                        Nova tarefa
+                    </a>
+
                     @if (!column.Tasks.Any())
                     {
                         <p class="text-muted">
