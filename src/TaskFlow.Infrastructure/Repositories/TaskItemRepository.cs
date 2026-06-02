@@ -74,4 +74,16 @@ public class TaskItemRepository : ITaskItemRepository
                 task => task.Id == id,
                 cancellationToken);
     }
+
+    public async Task<int> GetNextOrderAsync(
+        Guid boardColumnId,
+        CancellationToken cancellationToken)
+    {
+        var maxOrder = await _context.TaskItems
+            .Where(task => task.BoardColumnId == boardColumnId)
+            .Select(task => (int?)task.Order)
+            .MaxAsync(cancellationToken);
+
+        return (maxOrder ?? -1) + 1;
+    }
 }

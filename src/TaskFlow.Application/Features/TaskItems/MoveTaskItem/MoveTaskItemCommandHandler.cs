@@ -40,9 +40,13 @@ public class MoveTaskItemCommandHandler
             throw new NotFoundException("Coluna não encontrada.");
         }
 
+        var order = await _taskItemRepository.GetNextOrderAsync(
+            request.BoardColumnId,
+            cancellationToken);
+
         taskItem.MoveToColumn(
             request.BoardColumnId,
-            request.Order);
+            order);
 
         await _taskItemRepository.UpdateAsync(
             taskItem,

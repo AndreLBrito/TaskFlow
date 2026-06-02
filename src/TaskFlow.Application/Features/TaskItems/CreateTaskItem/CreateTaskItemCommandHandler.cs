@@ -32,11 +32,9 @@ public class CreateTaskItemCommandHandler
             throw new NotFoundException("Coluna não encontrada.");
         }
 
-        var tasks = await _taskItemRepository.GetByColumnIdAsync(
+        var order = await _taskItemRepository.GetNextOrderAsync(
             request.BoardColumnId,
             cancellationToken);
-
-        var order = tasks.Count + 1;
 
         var taskItem = new TaskItem(
             request.BoardColumnId,

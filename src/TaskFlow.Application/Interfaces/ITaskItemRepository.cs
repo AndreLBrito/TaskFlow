@@ -27,4 +27,8 @@ public interface ITaskItemRepository
     Task<TaskItem?> GetByIdWithBoardAsync(
         Guid id,
         CancellationToken cancellationToken);
+
+    Task<int> GetNextOrderAsync(
+        Guid boardColumnId,
+        CancellationToken cancellationToken);
 }
