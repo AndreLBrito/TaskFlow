@@ -13,7 +13,7 @@ TaskFlow é uma aplicação web de gerenciamento de tarefas inspirada em ferrame
 ### Backend
 
 * ASP.NET Core MVC
-* .NET 9
+* .NET 10
 * Entity Framework Core
 * PostgreSQL
 * MediatR
