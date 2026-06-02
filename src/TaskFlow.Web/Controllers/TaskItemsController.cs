@@ -1,8 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Features.TaskItems.CreateTaskItem;
+using TaskFlow.Application.Features.TaskItems.GetTaskItemById;
 using TaskFlow.Web.Mapping;
 using TaskFlow.Web.ViewModels.TaskItems.Create;
+using TaskFlow.Web.ViewModels.TaskItems.Details;
 
 namespace TaskFlow.Web.Controllers;
 
@@ -40,5 +42,22 @@ public class TaskItemsController : Controller
             "Details",
             "Boards",
             new { id = model.BoardId });
+    }
+
+    public async Task<IActionResult> Details(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var task = await _mediator.Send(
+            new GetTaskItemByIdQuery(id),
+            cancellationToken);
+
+        if (task is null)
+        {
+            return NotFound();
+        }
+
+        return View(
+            task.To<TaskItemDetailsViewModel>());
     }
 }

@@ -1,0 +1,18 @@
+@model TaskFlow.Web.ViewModels.TaskItems.Details.TaskItemDetailsViewModel
+
+<h1>@Model.Title</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.Description))
+{
+    <p>
+        @Model.Description
+    </p>
+}
+
+@if (Model.DueDate.HasValue)
+{
+    <p>
+        <strong>Prazo:</strong>
+        @Model.DueDate.Value.ToString("dd/MM/yyyy")
+    </p>
+}

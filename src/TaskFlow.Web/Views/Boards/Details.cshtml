@@ -43,9 +43,9 @@
                             <div class="card mb-2">
                                 <div class="card-body">
 
-                                    <strong>
+                                    <a asp-controller="TaskItems" asp-action="Details" asp-route-id="@task.Id">
                                         @task.Title
-                                    </strong>
+                                    </a>
 
                                     @if (!string.IsNullOrWhiteSpace(task.Description))
                                     {
