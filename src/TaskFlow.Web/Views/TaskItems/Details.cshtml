@@ -22,6 +22,9 @@
 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
     Editar
 </a>
+<a asp-action="Move" asp-route-id="@Model.Id" class="btn btn-info">
+    Mover
+</a>
 <form asp-action="Delete" method="post" class="d-inline">
 
     @Html.AntiForgeryToken()

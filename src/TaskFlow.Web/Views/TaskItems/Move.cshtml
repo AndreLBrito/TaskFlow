@@ -1,0 +1,41 @@
+@model TaskFlow.Web.ViewModels.TaskItems.Move.MoveTaskItemViewModel
+
+@{
+    ViewData["Title"] = "Mover tarefa";
+}
+
+<h1>Mover tarefa</h1>
+
+<form asp-action="Move" method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="BoardId" type="hidden" />
+    <input asp-for="Order" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="BoardColumnId"
+               class="form-label">
+            Coluna
+        </label>
+
+        <select asp-for="BoardColumnId"
+                asp-items="Model.Columns"
+                class="form-select">
+        </select>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Mover
+    </button>
+
+    <a asp-controller="Boards"
+       asp-action="Details"
+       asp-route-id="@Model.BoardId"
+       class="btn btn-secondary">
+        Cancelar
+    </a>
+
+</form>

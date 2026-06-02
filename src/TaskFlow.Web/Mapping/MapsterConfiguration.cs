@@ -5,6 +5,7 @@ using TaskFlow.Application.Features.Boards.GetBoards;
 using TaskFlow.Application.Features.Boards.UpdateBoard;
 using TaskFlow.Application.Features.TaskItems.CreateTaskItem;
 using TaskFlow.Application.Features.TaskItems.GetTaskItemById;
+using TaskFlow.Application.Features.TaskItems.MoveTaskItem;
 using TaskFlow.Application.Features.TaskItems.UpdateTaskItem;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
@@ -15,6 +16,7 @@ using TaskFlow.Web.ViewModels.Boards.List;
 using TaskFlow.Web.ViewModels.Boards.Update;
 using TaskFlow.Web.ViewModels.TaskItems.Create;
 using TaskFlow.Web.ViewModels.TaskItems.Details;
+using TaskFlow.Web.ViewModels.TaskItems.Move;
 using TaskFlow.Web.ViewModels.TaskItems.Update;
 using TaskFlow.Web.ViewModels.Workspaces.Create;
 using TaskFlow.Web.ViewModels.Workspaces.Update;
@@ -58,6 +60,9 @@ public static class MapsterConfiguration
             .NewConfig();
 
         TypeAdapterConfig<UpdateTaskItemViewModel, UpdateTaskItemCommand>
+            .NewConfig();
+
+        TypeAdapterConfig<MoveTaskItemViewModel, MoveTaskItemCommand>
             .NewConfig();
     }
 }
