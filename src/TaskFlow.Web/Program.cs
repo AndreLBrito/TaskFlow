@@ -3,6 +3,8 @@ using TaskFlow.Application.DependencyInjection;
 using TaskFlow.Infrastructure.DependencyInjection;
 using TaskFlow.Web.Filters;
 using TaskFlow.Web.Mapping;
+using Microsoft.EntityFrameworkCore;
+using TaskFlow.Infrastructure.Persistence;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -23,6 +25,12 @@ try
     {
         options.Filters.Add<ValidationExceptionFilter>();
         options.Filters.Add<GlobalExceptionFilter>();
+    });
+
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        options.UseNpgsql(
+            builder.Configuration.GetConnectionString("DefaultConnection"));
     });
 
     builder.Services.AddApplication();
