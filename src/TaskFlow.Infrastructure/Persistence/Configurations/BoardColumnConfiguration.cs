@@ -10,8 +10,8 @@ public class BoardColumnConfiguration : IEntityTypeConfiguration<BoardColumn>
     {
         builder.ToTable("BoardColumns");
 
-        builder.HasOne<Board>()
-            .WithMany()
+        builder.HasOne(column => column.Board)
+            .WithMany(board => board.Columns)
             .HasForeignKey(column => column.BoardId)
             .OnDelete(DeleteBehavior.Cascade);
 
