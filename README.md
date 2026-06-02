@@ -1,3 +1,7 @@
+<img width="1313" height="457" alt="TaskFlow2" src="https://github.com/user-attachments/assets/d5609e06-6d1d-4253-b77a-56baf644f0ba" />
+<img width="1315" height="409" alt="TaskFlow3" src="https://github.com/user-attachments/assets/0ee6f36d-7d4c-4a33-be88-e761ab870d44" />
+<img width="1331" height="584" alt="TaskFlow4" src="https://github.com/user-attachments/assets/a32cec0e-4c24-4da6-aeb5-d2701cf93e12" />
+<img width="1267" height="397" alt="TaskFlow1" src="https://github.com/user-attachments/assets/ff0998d0-0760-4088-a3ec-b97c3c7bb216" />
 # TaskFlow
 
 ![Build](https://github.com/AndreLBrito/TaskFlow/actions/workflows/dotnet.yml/badge.svg)
