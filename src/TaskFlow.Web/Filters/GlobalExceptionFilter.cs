@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Serilog;
 using TaskFlow.Application.Common.Exceptions;
 
 namespace TaskFlow.Web.Filters;
@@ -8,6 +9,10 @@ public class GlobalExceptionFilter : IAsyncExceptionFilter
 {
     public Task OnExceptionAsync(ExceptionContext context)
     {
+        Log.Error(
+            context.Exception,
+            "Erro não tratado");
+            
         switch (context.Exception)
         {
             case BusinessRuleException businessRuleException:

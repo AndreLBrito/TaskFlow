@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using TaskFlow.Application.DependencyInjection;
 using TaskFlow.Infrastructure.DependencyInjection;
 using TaskFlow.Infrastructure.Persistence;
@@ -6,6 +7,8 @@ using TaskFlow.Web.Filters;
 using TaskFlow.Web.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
@@ -23,6 +26,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 MapsterConfiguration.RegisterMappings();
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File(
+        "logs/taskflow-.txt",
+        rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 var app = builder.Build();
 
