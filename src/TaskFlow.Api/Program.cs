@@ -1,41 +1,78 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using TaskFlow.Application.DependencyInjection;
+using TaskFlow.Infrastructure.DependencyInjection;
+using TaskFlow.Infrastructure.Persistence;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(
+        "logs/taskflow-api-.txt",
+        rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.MapOpenApi();
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.UseSerilog();
+
+    builder.Services.AddControllers();
+
+    builder.Services.AddOpenApi();
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("Angular", policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    });
+
+    var connectionString =
+        builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException(
+            "A connection string 'DefaultConnection' não foi configurada.");
+
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        options.UseNpgsql(connectionString);
+    });
+
+    builder.Services.AddApplication();
+    builder.Services.AddInfrastructure();
+
+    var app = builder.Build();
+
+    app.UseSerilogRequestLogging();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseCors("Angular");
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
+catch (Exception exception)
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
+    Log.Fatal(
+        exception,
+        "A API foi finalizada inesperadamente.");
+}
+finally
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    await Log.CloseAndFlushAsync();
 }
