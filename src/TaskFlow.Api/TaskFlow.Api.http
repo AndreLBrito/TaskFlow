@@ -8,4 +8,7 @@ Accept: application/json
 GET {{TaskFlow_Api_HostAddress}}/openapi/v1.json
 Accept: application/json
 
-###
+### Listar Workspaces
+
+GET {{TaskFlow_Api_HostAddress}}/api/workspaces
+Accept: application/json
