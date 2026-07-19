@@ -8,8 +8,10 @@ public sealed class HealthController : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult Get()
+    public IActionResult Get(CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         return Ok(new
         {
             status = "healthy",

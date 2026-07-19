@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using TaskFlow.Api.Filters;
 using TaskFlow.Application.DependencyInjection;
 using TaskFlow.Infrastructure.DependencyInjection;
 using TaskFlow.Infrastructure.Persistence;
@@ -19,7 +20,10 @@ try
 
     builder.Host.UseSerilog();
 
-    builder.Services.AddControllers();
+    builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<GlobalExceptionFilter>();
+    });
 
     builder.Services.AddOpenApi();
 

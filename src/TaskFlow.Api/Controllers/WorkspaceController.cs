@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
+using TaskFlow.Application.Features.Workspaces.DeleteWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
 using TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
@@ -71,9 +72,9 @@ public sealed class WorkspacesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(
-    Guid id,
-    [FromBody] UpdateWorkspaceRequest request,
-    CancellationToken cancellationToken)
+        Guid id,
+        [FromBody] UpdateWorkspaceRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new UpdateWorkspaceCommand(
             id,
@@ -82,6 +83,20 @@ public sealed class WorkspacesController : ControllerBase
 
         await _sender.Send(
             command,
+            cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        await _sender.Send(
+            new DeleteWorkspaceCommand(id),
             cancellationToken);
 
         return NoContent();

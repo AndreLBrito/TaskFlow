@@ -41,4 +41,6 @@ Content-Type: application/json
   "description": "Descrição atualizada pela API"
 }
 
-###
+### Excluir Workspace
+
+DELETE {{TaskFlow_Api_HostAddress}}/api/workspaces/{{workspaceId}}
