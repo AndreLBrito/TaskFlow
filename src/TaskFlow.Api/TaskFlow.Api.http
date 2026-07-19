@@ -12,3 +12,15 @@ Accept: application/json
 
 GET {{TaskFlow_Api_HostAddress}}/api/workspaces
 Accept: application/json
+
+### Criar Workspace
+
+POST {{TaskFlow_Api_HostAddress}}/api/workspaces
+Content-Type: application/json
+
+{
+  "name": "Workspace Angular",
+  "description": "Workspace criado pela API"
+}
+
+###
