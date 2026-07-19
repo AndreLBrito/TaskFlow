@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
+using TaskFlow.Application.Features.Workspaces.UpdateWorkspace;
 
 namespace TaskFlow.Api.Controllers;
 
@@ -64,4 +65,29 @@ public sealed class WorkspacesController : ControllerBase
             new { id },
             new { id });
     }
+
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update(
+    Guid id,
+    [FromBody] UpdateWorkspaceRequest request,
+    CancellationToken cancellationToken)
+    {
+        var command = new UpdateWorkspaceCommand(
+            id,
+            request.Name,
+            request.Description);
+
+        await _sender.Send(
+            command,
+            cancellationToken);
+
+        return NoContent();
+    }
 }
+
+public sealed record UpdateWorkspaceRequest(
+    string? Name,
+    string? Description);

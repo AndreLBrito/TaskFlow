@@ -1,9 +1,12 @@
 @TaskFlow_Api_HostAddress = http://localhost:5289
+@workspaceId = d23ff549-6dd5-46d4-9efc-af2f666c7670
+
+### Health
 
 GET {{TaskFlow_Api_HostAddress}}/api/health
 Accept: application/json
 
-###
+### OpenAPI
 
 GET {{TaskFlow_Api_HostAddress}}/openapi/v1.json
 Accept: application/json
@@ -11,6 +14,11 @@ Accept: application/json
 ### Listar Workspaces
 
 GET {{TaskFlow_Api_HostAddress}}/api/workspaces
+Accept: application/json
+
+### Buscar Workspace por ID
+
+GET {{TaskFlow_Api_HostAddress}}/api/workspaces/{{workspaceId}}
 Accept: application/json
 
 ### Criar Workspace
@@ -21,6 +29,16 @@ Content-Type: application/json
 {
   "name": "Workspace Angular",
   "description": "Workspace criado pela API"
+}
+
+### Atualizar Workspace
+
+PUT {{TaskFlow_Api_HostAddress}}/api/workspaces/{{workspaceId}}
+Content-Type: application/json
+
+{
+  "name": "Workspace Angular atualizado",
+  "description": "Descrição atualizada pela API"
 }
 
 ###
