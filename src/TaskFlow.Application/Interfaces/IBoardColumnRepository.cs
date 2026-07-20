@@ -19,4 +19,20 @@ public interface IBoardColumnRepository
     Task<BoardColumn?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken);
+
+    Task<int> GetNextOrderAsync(
+        Guid boardId,
+        CancellationToken cancellationToken);
+
+    Task UpdateAsync(
+        BoardColumn boardColumn,
+        CancellationToken cancellationToken);
+
+    Task UpdateRangeAsync(
+        IEnumerable<BoardColumn> boardColumns,
+        CancellationToken cancellationToken);
+
+    Task DeleteAsync(
+        BoardColumn boardColumn,
+        CancellationToken cancellationToken);
 }

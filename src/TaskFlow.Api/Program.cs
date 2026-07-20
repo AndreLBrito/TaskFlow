@@ -32,7 +32,9 @@ try
         options.AddPolicy("Angular", policy =>
         {
             policy
-                .WithOrigins("http://localhost:4200")
+                .WithOrigins(
+                    "http://localhost:4200",
+                    "https://localhost:4200")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -79,4 +81,8 @@ catch (Exception exception)
 finally
 {
     await Log.CloseAndFlushAsync();
+}
+
+public partial class Program
+{
 }

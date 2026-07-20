@@ -34,6 +34,15 @@ public class TaskItemRepository : ITaskItemRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task UpdateRangeAsync(
+        IEnumerable<TaskItem> taskItems,
+        CancellationToken cancellationToken)
+    {
+        _context.TaskItems.UpdateRange(taskItems);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task DeleteAsync(
         TaskItem taskItem,
         CancellationToken cancellationToken)

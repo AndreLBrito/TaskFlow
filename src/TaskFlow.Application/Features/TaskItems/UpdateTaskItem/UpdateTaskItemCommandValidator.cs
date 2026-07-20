@@ -13,9 +13,9 @@ public class UpdateTaskItemCommandValidator
         RuleFor(command => command.Title)
             .NotEmpty()
             .WithMessage("O título é obrigatório.")
-            .MaximumLength(200);
+            .MaximumLength(150);
 
         RuleFor(command => command.Description)
-            .MaximumLength(2000);
+            .MaximumLength(1000);
     }
 }

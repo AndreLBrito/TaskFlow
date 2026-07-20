@@ -1,5 +1,8 @@
 @TaskFlow_Api_HostAddress = http://localhost:5289
-@workspaceId = d23ff549-6dd5-46d4-9efc-af2f666c7670
+@workspaceId = 00000000-0000-0000-0000-000000000000
+@boardId = 00000000-0000-0000-0000-000000000000
+@columnId = 00000000-0000-0000-0000-000000000000
+@taskId = 00000000-0000-0000-0000-000000000000
 
 ### Health
 
@@ -11,36 +14,169 @@ Accept: application/json
 GET {{TaskFlow_Api_HostAddress}}/openapi/v1.json
 Accept: application/json
 
-### Listar Workspaces
+### Dashboard
+
+GET {{TaskFlow_Api_HostAddress}}/api/dashboard
+Accept: application/json
+
+### Workspaces - Listar
 
 GET {{TaskFlow_Api_HostAddress}}/api/workspaces
 Accept: application/json
 
-### Buscar Workspace por ID
+### Workspaces - Consultar por ID
 
 GET {{TaskFlow_Api_HostAddress}}/api/workspaces/{{workspaceId}}
 Accept: application/json
 
-### Criar Workspace
+### Workspaces - Criar
 
 POST {{TaskFlow_Api_HostAddress}}/api/workspaces
 Content-Type: application/json
 
 {
-  "name": "Workspace Angular",
-  "description": "Workspace criado pela API"
+  "name": "Produto",
+  "description": "Planejamento do produto"
 }
 
-### Atualizar Workspace
+### Workspaces - Atualizar
 
 PUT {{TaskFlow_Api_HostAddress}}/api/workspaces/{{workspaceId}}
 Content-Type: application/json
 
 {
-  "name": "Workspace Angular atualizado",
-  "description": "Descrição atualizada pela API"
+  "name": "Produto atualizado",
+  "description": "Planejamento atualizado"
 }
 
-### Excluir Workspace
+### Workspaces - Excluir
 
 DELETE {{TaskFlow_Api_HostAddress}}/api/workspaces/{{workspaceId}}
+
+### Boards - Listar por workspace
+
+GET {{TaskFlow_Api_HostAddress}}/api/workspaces/{{workspaceId}}/boards
+Accept: application/json
+
+### Boards - Consultar por ID
+
+GET {{TaskFlow_Api_HostAddress}}/api/boards/{{boardId}}
+Accept: application/json
+
+### Boards - Criar
+
+POST {{TaskFlow_Api_HostAddress}}/api/workspaces/{{workspaceId}}/boards
+Content-Type: application/json
+
+{
+  "name": "Roadmap",
+  "description": "Quadro principal"
+}
+
+### Boards - Atualizar
+
+PUT {{TaskFlow_Api_HostAddress}}/api/boards/{{boardId}}
+Content-Type: application/json
+
+{
+  "name": "Roadmap atualizado",
+  "description": "Quadro principal atualizado"
+}
+
+### Boards - Excluir
+
+DELETE {{TaskFlow_Api_HostAddress}}/api/boards/{{boardId}}
+
+### Kanban - Carregar quadro completo
+
+GET {{TaskFlow_Api_HostAddress}}/api/boards/{{boardId}}/kanban
+Accept: application/json
+
+### BoardColumns - Listar por board
+
+GET {{TaskFlow_Api_HostAddress}}/api/boards/{{boardId}}/columns
+Accept: application/json
+
+### BoardColumns - Consultar por ID
+
+GET {{TaskFlow_Api_HostAddress}}/api/columns/{{columnId}}
+Accept: application/json
+
+### BoardColumns - Criar
+
+POST {{TaskFlow_Api_HostAddress}}/api/boards/{{boardId}}/columns
+Content-Type: application/json
+
+{
+  "name": "Em revisão"
+}
+
+### BoardColumns - Atualizar
+
+PUT {{TaskFlow_Api_HostAddress}}/api/columns/{{columnId}}
+Content-Type: application/json
+
+{
+  "name": "Revisão"
+}
+
+### BoardColumns - Reordenar
+
+PUT {{TaskFlow_Api_HostAddress}}/api/boards/{{boardId}}/columns/order
+Content-Type: application/json
+
+{
+  "columnIds": [
+    "{{columnId}}"
+  ]
+}
+
+### BoardColumns - Excluir
+
+DELETE {{TaskFlow_Api_HostAddress}}/api/columns/{{columnId}}
+
+### TaskItems - Listar por coluna
+
+GET {{TaskFlow_Api_HostAddress}}/api/columns/{{columnId}}/tasks
+Accept: application/json
+
+### TaskItems - Consultar por ID
+
+GET {{TaskFlow_Api_HostAddress}}/api/tasks/{{taskId}}
+Accept: application/json
+
+### TaskItems - Criar
+
+POST {{TaskFlow_Api_HostAddress}}/api/columns/{{columnId}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Implementar tela Kanban",
+  "description": "Consumir o endpoint agregado",
+  "dueDate": "2026-07-31T00:00:00Z"
+}
+
+### TaskItems - Atualizar
+
+PUT {{TaskFlow_Api_HostAddress}}/api/tasks/{{taskId}}
+Content-Type: application/json
+
+{
+  "title": "Implementar tela Kanban",
+  "description": "Integração concluída",
+  "dueDate": "2026-08-01T00:00:00Z"
+}
+
+### TaskItems - Mover ou reordenar
+
+PUT {{TaskFlow_Api_HostAddress}}/api/tasks/{{taskId}}/move
+Content-Type: application/json
+
+{
+  "targetColumnId": "{{columnId}}",
+  "order": 0
+}
+
+### TaskItems - Excluir
+
+DELETE {{TaskFlow_Api_HostAddress}}/api/tasks/{{taskId}}

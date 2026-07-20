@@ -55,4 +55,43 @@ public class BoardColumnRepository : IBoardColumnRepository
                 column => column.Id == id,
                 cancellationToken);
     }
+
+    public async Task<int> GetNextOrderAsync(
+        Guid boardId,
+        CancellationToken cancellationToken)
+    {
+        var maxOrder = await _context.BoardColumns
+            .Where(column => column.BoardId == boardId)
+            .Select(column => (int?)column.Order)
+            .MaxAsync(cancellationToken);
+
+        return (maxOrder ?? -1) + 1;
+    }
+
+    public async Task UpdateAsync(
+        BoardColumn boardColumn,
+        CancellationToken cancellationToken)
+    {
+        _context.BoardColumns.Update(boardColumn);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateRangeAsync(
+        IEnumerable<BoardColumn> boardColumns,
+        CancellationToken cancellationToken)
+    {
+        _context.BoardColumns.UpdateRange(boardColumns);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(
+        BoardColumn boardColumn,
+        CancellationToken cancellationToken)
+    {
+        _context.BoardColumns.Remove(boardColumn);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

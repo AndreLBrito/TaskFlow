@@ -40,7 +40,7 @@ public class CreateTaskItemCommandHandler
             request.BoardColumnId,
             request.Title!,
             request.Description,
-            null,
+            request.DueDate,
             order);
 
         await _taskItemRepository.AddAsync(

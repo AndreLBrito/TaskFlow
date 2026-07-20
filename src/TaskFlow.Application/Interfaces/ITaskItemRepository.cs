@@ -12,6 +12,10 @@ public interface ITaskItemRepository
         TaskItem taskItem,
         CancellationToken cancellationToken);
 
+    Task UpdateRangeAsync(
+        IEnumerable<TaskItem> taskItems,
+        CancellationToken cancellationToken);
+
     Task DeleteAsync(
         TaskItem taskItem,
         CancellationToken cancellationToken);

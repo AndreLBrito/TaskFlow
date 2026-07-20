@@ -1,6 +1,7 @@
 using MediatR;
 using TaskFlow.Application.Common.Exceptions;
 using TaskFlow.Application.Interfaces;
+using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.Application.Features.TaskItems.MoveTaskItem;
 
@@ -31,25 +32,66 @@ public class MoveTaskItemCommandHandler
             throw new NotFoundException("Tarefa não encontrada.");
         }
 
-        var boardColumn = await _boardColumnRepository.GetByIdAsync(
+        var sourceColumn = await _boardColumnRepository.GetByIdAsync(
+            taskItem.BoardColumnId,
+            cancellationToken);
+
+        if (sourceColumn is null)
+        {
+            throw new NotFoundException("Coluna de origem não encontrada.");
+        }
+
+        var targetColumn = await _boardColumnRepository.GetByIdAsync(
             request.BoardColumnId,
             cancellationToken);
 
-        if (boardColumn is null)
+        if (targetColumn is null)
         {
             throw new NotFoundException("Coluna não encontrada.");
         }
 
-        var order = await _taskItemRepository.GetNextOrderAsync(
-            request.BoardColumnId,
-            cancellationToken);
+        if (sourceColumn.BoardId != targetColumn.BoardId)
+        {
+            throw new BusinessRuleException(
+                "A tarefa não pode ser movida para uma coluna de outro quadro.");
+        }
 
-        taskItem.MoveToColumn(
-            request.BoardColumnId,
-            order);
+        var sourceTasks = (await _taskItemRepository.GetByColumnIdAsync(
+                sourceColumn.Id,
+                cancellationToken))
+            .Where(task => task.Id != taskItem.Id)
+            .ToList();
 
-        await _taskItemRepository.UpdateAsync(
-            taskItem,
+        var targetTasks = sourceColumn.Id == targetColumn.Id
+            ? sourceTasks
+            : (await _taskItemRepository.GetByColumnIdAsync(
+                    targetColumn.Id,
+                    cancellationToken))
+                .Where(task => task.Id != taskItem.Id)
+                .ToList();
+
+        var targetOrder = Math.Min(request.Order, targetTasks.Count);
+        targetTasks.Insert(targetOrder, taskItem);
+
+        ReorderTasks(sourceTasks, sourceColumn.Id);
+        ReorderTasks(targetTasks, targetColumn.Id);
+
+        var changedTasks = sourceTasks
+            .Concat(targetTasks)
+            .DistinctBy(task => task.Id);
+
+        await _taskItemRepository.UpdateRangeAsync(
+            changedTasks,
             cancellationToken);
+    }
+
+    private static void ReorderTasks(
+        IReadOnlyList<TaskItem> tasks,
+        Guid boardColumnId)
+    {
+        for (var index = 0; index < tasks.Count; index++)
+        {
+            tasks[index].MoveToColumn(boardColumnId, index);
+        }
     }
 }

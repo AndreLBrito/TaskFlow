@@ -30,6 +30,19 @@ public class BoardRepository : IBoardRepository
             .FirstOrDefaultAsync(board => board.Id == id, cancellationToken);
     }
 
+    public async Task<Board?> GetByIdWithColumnsAndTasksAsync(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        return await _context.Boards
+            .AsNoTracking()
+            .Include(board => board.Columns)
+            .ThenInclude(column => column.Tasks)
+            .FirstOrDefaultAsync(
+                board => board.Id == id,
+                cancellationToken);
+    }
+
     public async Task<IReadOnlyList<Board>> GetByWorkspaceIdAsync(
         Guid workspaceId,
         CancellationToken cancellationToken)
@@ -41,8 +54,8 @@ public class BoardRepository : IBoardRepository
     }
 
     public async Task UpdateAsync(
-    Board board,
-    CancellationToken cancellationToken)
+        Board board,
+        CancellationToken cancellationToken)
     {
         _context.Boards.Update(board);
 

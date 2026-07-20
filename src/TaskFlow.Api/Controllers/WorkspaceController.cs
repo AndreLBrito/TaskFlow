@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TaskFlow.Api.Contracts.Common;
+using TaskFlow.Api.Contracts.Workspaces;
 using TaskFlow.Application.Features.Workspaces.CreateWorkspace;
 using TaskFlow.Application.Features.Workspaces.DeleteWorkspace;
 using TaskFlow.Application.Features.Workspaces.GetWorkspaceById;
@@ -20,7 +22,7 @@ public sealed class WorkspacesController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<WorkspaceListItemDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IReadOnlyList<WorkspaceListItemDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
     {
@@ -33,7 +35,7 @@ public sealed class WorkspacesController : ControllerBase
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(WorkspaceDetailsDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(
         Guid id,
         CancellationToken cancellationToken)
@@ -44,19 +46,24 @@ public sealed class WorkspacesController : ControllerBase
 
         if (result is null)
         {
-            return NotFound();
+            return NotFound(
+                ApiProblemDetails.NotFound("Workspace não encontrado."));
         }
 
         return Ok(result);
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(IdResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(
-        [FromBody] CreateWorkspaceCommand command,
+        [FromBody] CreateWorkspaceRequest request,
         CancellationToken cancellationToken)
     {
+        var command = new CreateWorkspaceCommand(
+            request.Name,
+            request.Description);
+
         var id = await _sender.Send(
             command,
             cancellationToken);
@@ -64,13 +71,13 @@ public sealed class WorkspacesController : ControllerBase
         return CreatedAtAction(
             nameof(GetById),
             new { id },
-            new { id });
+            new IdResponse(id));
     }
 
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(
         Guid id,
         [FromBody] UpdateWorkspaceRequest request,
@@ -90,7 +97,7 @@ public sealed class WorkspacesController : ControllerBase
 
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(
         Guid id,
         CancellationToken cancellationToken)
@@ -102,7 +109,3 @@ public sealed class WorkspacesController : ControllerBase
         return NoContent();
     }
 }
-
-public sealed record UpdateWorkspaceRequest(
-    string? Name,
-    string? Description);

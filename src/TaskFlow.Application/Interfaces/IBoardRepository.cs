@@ -12,6 +12,10 @@ public interface IBoardRepository
         Guid id,
         CancellationToken cancellationToken);
 
+    Task<Board?> GetByIdWithColumnsAndTasksAsync(
+        Guid id,
+        CancellationToken cancellationToken);
+
     Task<IReadOnlyList<Board>> GetByWorkspaceIdAsync(
         Guid workspaceId,
         CancellationToken cancellationToken);
