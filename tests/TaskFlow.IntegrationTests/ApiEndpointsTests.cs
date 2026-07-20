@@ -2,9 +2,12 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using TaskFlow.Api.Contracts.Common;
+using TaskFlow.Application.Features.BoardColumns.GetBoardColumnById;
 using TaskFlow.Application.Features.BoardColumns.GetBoardColumns;
+using TaskFlow.Application.Features.Boards.GetBoardById;
 using TaskFlow.Application.Features.Boards.GetBoardKanban;
 using TaskFlow.Application.Features.Dashboard.GetDashboard;
+using TaskFlow.Application.Features.Workspaces.GetWorkspaces;
 using TaskFlow.Domain.Entities;
 
 namespace TaskFlow.IntegrationTests;
@@ -33,6 +36,10 @@ public class ApiEndpointsTests : IClassFixture<TaskFlowApiFactory>
         var workspace = await workspaceResponse.Content.ReadFromJsonAsync<IdResponse>();
         Assert.NotNull(workspace);
 
+        var workspaces = await _client.GetFromJsonAsync<List<WorkspaceListItemDto>>(
+            "/api/workspaces");
+        Assert.Contains(workspaces!, item => item.Id == workspace.Id);
+
         var workspaceDetailsResponse = await _client.GetAsync(
             $"/api/workspaces/{workspace.Id}");
         Assert.Equal(HttpStatusCode.OK, workspaceDetailsResponse.StatusCode);
@@ -49,6 +56,11 @@ public class ApiEndpointsTests : IClassFixture<TaskFlowApiFactory>
         Assert.Equal(HttpStatusCode.Created, boardResponse.StatusCode);
         var board = await boardResponse.Content.ReadFromJsonAsync<IdResponse>();
         Assert.NotNull(board);
+
+        var boardDetails = await _client.GetFromJsonAsync<BoardDetailsDto>(
+            $"/api/boards/{board.Id}");
+        Assert.NotNull(boardDetails);
+        Assert.Equal(workspace.Id, boardDetails.WorkspaceId);
 
         var boardsResponse = await _client.GetAsync(
             $"/api/workspaces/{workspace.Id}/boards");
@@ -95,6 +107,11 @@ public class ApiEndpointsTests : IClassFixture<TaskFlowApiFactory>
             $"/api/columns/{createdColumn.Id}",
             new { name = "Em revisão" });
         Assert.Equal(HttpStatusCode.NoContent, updateColumnResponse.StatusCode);
+
+        var columnDetails = await _client.GetFromJsonAsync<BoardColumnDetailsDto>(
+            $"/api/columns/{createdColumn.Id}");
+        Assert.NotNull(columnDetails);
+        Assert.Equal("Em revisão", columnDetails.Name);
 
         var columns = await _client.GetFromJsonAsync<List<BoardColumnListItemDto>>(
             $"/api/boards/{board.Id}/columns");
@@ -222,6 +239,10 @@ public class ApiEndpointsTests : IClassFixture<TaskFlowApiFactory>
     [Fact]
     public async Task OpenApi_ShouldExposeAllAngularEndpoints()
     {
+        var health = await _client.GetFromJsonAsync<HealthResponse>("/api/health");
+        Assert.NotNull(health);
+        Assert.Equal("healthy", health.Status);
+
         var document = await _client.GetFromJsonAsync<JsonElement>(
             "/openapi/v1.json");
         var paths = document.GetProperty("paths");
