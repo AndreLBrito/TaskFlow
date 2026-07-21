@@ -1,5 +1,36 @@
-<h1>Workspaces</h1>
+<section class="workspace-page">
+  <app-workspace-toolbar (createWorkspace)="createWorkspace()" />
 
-<pre>
-{{ workspaces | async | json }}
-</pre>
+  <div class="workspace-content">
+    @if (loading()) {
+      <div class="state-container" role="status" aria-label="Carregando workspaces">
+        <mat-spinner diameter="48" />
+      </div>
+    } @else if (error()) {
+      <div class="state-container" role="alert">
+        <mat-icon class="state-icon">error_outline</mat-icon>
+        <h2>Não foi possível carregar os workspaces.</h2>
+        <button mat-stroked-button type="button" (click)="loadWorkspaces()">
+          <mat-icon>refresh</mat-icon>
+          Tentar novamente
+        </button>
+      </div>
+    } @else if (workspaces().length === 0) {
+      <div class="state-container empty-state">
+        <mat-icon class="state-icon">folder_open</mat-icon>
+        <h2>Nenhum workspace encontrado</h2>
+        <p>Crie seu primeiro workspace para começar a organizar seus projetos.</p>
+        <button mat-flat-button type="button" (click)="createWorkspace()">
+          <mat-icon>add</mat-icon>
+          Criar primeiro workspace
+        </button>
+      </div>
+    } @else {
+      <app-workspace-table
+        [workspaces]="workspaces()"
+        (editWorkspace)="editWorkspace($event)"
+        (deleteWorkspace)="deleteWorkspace($event)"
+      />
+    }
+  </div>
+</section>
